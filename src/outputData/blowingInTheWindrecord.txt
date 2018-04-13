@@ -1,0 +1,1 @@
+single loop cost 3 milisecond on 187 and three loops cost 3 milisecond

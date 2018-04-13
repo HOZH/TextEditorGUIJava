@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="536.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TextEditorGUI">
+   <children>
+      <MenuBar fx:id="menuBar" prefHeight="29.0" prefWidth="600.0">
+        <menus>
+          <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem fx:id="newButton" mnemonicParsing="false" onAction="#newFile" text="New" />
+              <MenuItem fx:id="openButton" mnemonicParsing="false" onAction="#openFile" text="Open" />
+                  <MenuItem fx:id="closeButton" mnemonicParsing="false" onAction="#closeFile" text="Close" />
+                  <MenuItem fx:id="saveButton" mnemonicParsing="false" onAction="#saveFile" text="Save" />
+                  <MenuItem fx:id="exitButton" mnemonicParsing="false" onAction="#exitFile" text="Exit" />
+            </items>
+          </Menu>
+          <Menu fx:id="viewMenu" mnemonicParsing="false" text="View">
+            <items>
+              <MenuItem fx:id="wordCountButton" mnemonicParsing="false" onAction="#wordCounter" text="Word Count" />
+                  <MenuItem fx:id="sentenceCountButton" mnemonicParsing="false" onAction="#sentenceCounter" text="Sentence Count" />
+                  <MenuItem fx:id="fleschScoreButton" mnemonicParsing="false" onAction="#fleschScoreGetter" text="Flesch Score" />
+            </items>
+          </Menu>
+          <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+            <items>
+                  <MenuItem fx:id="copyButton" mnemonicParsing="false" onAction="#copy" text="Copy" />
+              <MenuItem fx:id="cutButton" mnemonicParsing="false" onAction="#cut" text="Cut" />
+                  <MenuItem fx:id="pasteButton" mnemonicParsing="false" onAction="#paste" text="Paste" />
+                  <MenuItem fx:id="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete" />
+                  <MenuItem fx:id="markovButton" mnemonicParsing="false" onAction="#markov" text="Markov" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TextArea fx:id="textArea" layoutY="71.0" prefHeight="389.0" prefWidth="600.0" wrapText="true" />
+      <TextField fx:id="statusBar" layoutY="508.0" prefHeight="0.0" prefWidth="600.0" />
+   </children>
+</AnchorPane>
