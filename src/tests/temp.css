@@ -1,0 +1,6 @@
+.dic{
+
+    -fx-highlight-fill: green; /* makes color of highlight region */
+    -fx-highlight-text-fill: white;  /* makes the color of highlighted text */
+
+}

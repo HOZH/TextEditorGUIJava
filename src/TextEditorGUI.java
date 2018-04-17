@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class TextEditorGUI {
 
     @FXML
@@ -75,6 +76,12 @@ public class TextEditorGUI {
     private Random random = new Random();
 
 
+
+
+
+
+
+
     private void load() throws FileNotFoundException {
         scanner = new Scanner(currentFile);
         inputTxt = new StringBuilder();
@@ -95,6 +102,7 @@ public class TextEditorGUI {
         String words = currentTxt;
         String[] strs = words.split(",\\s*|\\s|\\.\\s*");
         wordCount = (int) Arrays.stream(strs).count();
+
     }
 
     private void sentenceC() {
@@ -212,6 +220,7 @@ public class TextEditorGUI {
     }
 
     public void newFile() throws IOException {
+
         tempFile = File.createTempFile("tempfile", "txt");
         currentFile = tempFile;
 //        System.out.println(currentFile==tempFile);
@@ -225,6 +234,7 @@ public class TextEditorGUI {
     }
 
     public void openFile() throws FileNotFoundException {
+
         fileChooserWindow();
 
         load();
@@ -344,13 +354,22 @@ public class TextEditorGUI {
         textField.setPromptText("input the key word here (String)");
         TextField textField1 = new TextField();
         textField1.setPromptText("input the length here (positive integer)");
+        generate.setOnAction(event ->{
+//            try{
+
+                var startTime = System.currentTimeMillis();
+                formMarkov();
+                System.out.println(System.currentTimeMillis()-startTime+" millisecond used");
+//            }
+//            catch(NumberFormatException ex)
+//            {
+//                textField1.setText("please input a positive integer here");
+//            }
+        });
         add.setOnAction(event1 -> {
             try {
-                String txt = textField.getText();
-                int length = Integer.valueOf(textField1.getText());
-                inputLength = length;
-                inputString = txt;
-                formMarkov();
+            
+//                formMarkov();
                 generateMarkov();
             } catch (NumberFormatException ex) {
                 textField1.setText("please input a positive integer here");
