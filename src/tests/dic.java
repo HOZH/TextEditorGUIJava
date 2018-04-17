@@ -2,6 +2,7 @@ package tests;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -22,16 +23,20 @@ public class dic {
         HashSet spellErrors = new HashSet<>();
         String[] words = txt.split(",\\s*|\\s|\\.\\s*");
 
-
+var errorLocations = new ArrayList<Integer>();
         for (int i = 0; i < words.length; i++) {
             if (map.get(words[i]) == null) {
              //   System.out.println(words[i]);
+                errorLocations.add(i);
                 spellErrors.add(words[i]);
             }
 
         }
 spellErrors.stream().forEach(System.out::println);
-        Predicate<String> keyTerm =x->x.contains(spellErrors)
+        errorLocations.stream().forEach(System.out::println);
+        var errorsLocationsArr =errorLocations.toArray();
+        System.out.println(errorsLocationsArr[1]);
+//        Predicate<String> keyTerm =x->x.contains(spellErrors) // fixme
 //                x->x.length()==4;
 
 

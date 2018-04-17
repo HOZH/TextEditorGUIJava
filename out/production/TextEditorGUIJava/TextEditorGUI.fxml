@@ -34,6 +34,7 @@
                         <MenuItem fx:id="pasteButton" mnemonicParsing="false" onAction="#paste" text="Paste" />
                         <MenuItem fx:id="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete" />
                         <MenuItem fx:id="markovButton" mnemonicParsing="false" onAction="#markov" text="Markov" />
+                  <MenuItem fx:id="spellCheckButton" mnemonicParsing="false" onAction="#spellCheck" text="SpellCheck" />
                     </items>
                 </Menu>
             </menus>

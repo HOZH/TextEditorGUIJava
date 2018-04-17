@@ -1,4 +1,6 @@
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -30,7 +32,7 @@ public class TextEditorGUI {
     MenuItem wordCountButton, sentenceCountButton, fleschScoreButton;
 
     @FXML
-    MenuItem copyButton, cutButton, deleteButton, pasteButton, markovButton;
+    MenuItem copyButton, cutButton, deleteButton, pasteButton, markovButton, spellCheckButton;
 
     @FXML
     TextArea textArea;
@@ -75,12 +77,27 @@ public class TextEditorGUI {
     private ListIterator iter2 = new ListIterator(masterList);
     private Random random = new Random();
 
+    /*
+    for spell check using
+     */
 
 
 
 
+    private void popUpSpellCheckWindow() throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("SpellCheckGUI.fxml"));
+        Stage spellCheckStage = new Stage();
+        spellCheckStage.setTitle("Spell Checker");
+        spellCheckStage.setScene(new Scene(root));
+        spellCheckStage.show();
+    }
+
+    public void spellCheck() throws IOException {
+        popUpSpellCheckWindow();
 
 
+
+    }
 
     private void load() throws FileNotFoundException {
         scanner = new Scanner(currentFile);
@@ -354,12 +371,12 @@ public class TextEditorGUI {
         textField.setPromptText("input the key word here (String)");
         TextField textField1 = new TextField();
         textField1.setPromptText("input the length here (positive integer)");
-        generate.setOnAction(event ->{
+        generate.setOnAction(event -> {
 //            try{
 
-                var startTime = System.currentTimeMillis();
-                formMarkov();
-                System.out.println(System.currentTimeMillis()-startTime+" millisecond used");
+            var startTime = System.currentTimeMillis();
+            formMarkov();
+            System.out.println(System.currentTimeMillis() - startTime + " millisecond used");
 //            }
 //            catch(NumberFormatException ex)
 //            {
@@ -368,7 +385,7 @@ public class TextEditorGUI {
         });
         add.setOnAction(event1 -> {
             try {
-            
+
 //                formMarkov();
                 generateMarkov();
             } catch (NumberFormatException ex) {
@@ -473,5 +490,6 @@ public class TextEditorGUI {
 
 
     }
+
 
 }

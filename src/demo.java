@@ -35,6 +35,7 @@ public class demo extends Application {
             dictionary.put(dicScanner.next(), "");
         }
 
+
     }
 }
 
