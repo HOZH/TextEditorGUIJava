@@ -23,6 +23,7 @@ public class demo extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
         loadDictionary();
+
     }
 
 
@@ -51,14 +52,13 @@ performance record
 
 /*
 todo  up to 4 threads random access reading for intput txt
-todo  up to 4 threads for generating markov
+todo  rewrite markov with binary search tree or hashmap
 todo  rewrite 3loops
 todo  1) When the string length is 100 words
 todo 2) When the string length is 1,000 words
 todo 3) When the string length is 10,000 words.
 todo 4) When the string length is 100,000 words.
-todo hashMap dictionary
-todo replace explicit variable type to variable
+todo replace explicit variable type to variable.
 
 
  */

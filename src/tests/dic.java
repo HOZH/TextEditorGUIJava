@@ -19,7 +19,7 @@ public class dic {
         }
 
 
-        String txt = "lakfjlkfj one two hslfdhlak";
+        String txt = "once upon the time there is a man whose name is mike he is a male lalala";
         HashSet spellErrors = new HashSet<>();
         String[] words = txt.split(",\\s*|\\s|\\.\\s*");
 
@@ -35,7 +35,7 @@ var errorLocations = new ArrayList<Integer>();
 spellErrors.stream().forEach(System.out::println);
         errorLocations.stream().forEach(System.out::println);
         var errorsLocationsArr =errorLocations.toArray();
-        System.out.println(errorsLocationsArr[1]);
+        System.out.println(errorsLocationsArr[0]);
 //        Predicate<String> keyTerm =x->x.contains(spellErrors) // fixme
 //                x->x.length()==4;
 

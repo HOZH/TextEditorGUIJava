@@ -45,7 +45,7 @@ public class TextEditorGUI {
     private FileChooser fileChooser = new FileChooser();
     private Scanner scanner;
     private StringBuilder inputTxt;
-    private String currentTxt = "";
+    public static String currentTxt = "";
     private PrintWriter printWriter;
 //    private String=
 
@@ -94,6 +94,7 @@ public class TextEditorGUI {
 
     public void spellCheck() throws IOException {
         popUpSpellCheckWindow();
+        System.out.println("the size of dictionary is"+demo.dictionary.size() );
 
 
 
@@ -151,7 +152,7 @@ public class TextEditorGUI {
             if (x.length() >= 3
                     &&
                     x.substring(0, x.length() - 2).matches("[AEIOUaeiouyY]+")
-                    && ((x.endsWith("e") && x.charAt(x.length() - 2) != 'l') || x.endsWith("es") || x.endsWith("ed"))) {
+                    && ((x.endsWith("e") && x .charAt(x.length() - 2) != 'l') || x.endsWith("es") || x.endsWith("ed"))) {
                 //   System.out.println(x);
                 return null;
 
@@ -180,7 +181,6 @@ public class TextEditorGUI {
     public long analyze() {
 
         var timeConSumed = System.currentTimeMillis();
-        //todo do a three loops version
         String words = currentTxt;
         String syllables = "[aeiouyAEIOUY]+";
 
@@ -367,6 +367,7 @@ public class TextEditorGUI {
         Button add = new Button("submit");
         Button generate = new Button("generate");
         TextField textField = new TextField();
+        
 
         textField.setPromptText("input the key word here (String)");
         TextField textField1 = new TextField();
@@ -385,7 +386,8 @@ public class TextEditorGUI {
         });
         add.setOnAction(event1 -> {
             try {
-
+inputString=textField.getText();
+inputLength=Integer.valueOf(textField1.getText());
 //                formMarkov();
                 generateMarkov();
             } catch (NumberFormatException ex) {

@@ -21,7 +21,15 @@ public class spellCheckGUI extends Application {
             map.put(scanner.next(), "");
         }
 
-        String txt = "lakfjlkfj one two hslfdhlak";
+
+
+
+
+
+
+
+
+        String txt = "once upods the time there is a mavn whose nawame is mike he is a male lalala";
         HashSet spellErrors = new HashSet<>();
         String[] words = txt.split(",\\s*|\\s|\\.\\s*");
 
@@ -48,7 +56,7 @@ public class spellCheckGUI extends Application {
 
         HashMap map1 = getChars();
         int[] range=new int[2];
-        LinkedHashSet<Integer> ints = new LinkedHashSet();
+        ArrayList ints = new ArrayList();
         HashMap<Integer,int[]> wordLocation= new HashMap();
 
         for (var i = 0; i < txt.length(); i++) {
@@ -123,7 +131,7 @@ public class spellCheckGUI extends Application {
         var ta = new TextArea();
         ta.setText(txt);
 
-        ta.selectRange(answer[0],answer[1]+1);
+        ta.selectRange(answer[0],answer[1]);
 
 
         vBox.getChildren().add(ta);

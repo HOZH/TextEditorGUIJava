@@ -4,10 +4,17 @@ import java.util.*;
 
 public class wordIndex2 {
     public static void main(String[] args) {
-        var str = "o'nce upon the time, there";
+        var str = "once upon the time there is a man whose name is mike he is a male lalala";
+        for(int i = 0 ; i <str.length();i++)
+        {
+            System.out.print(str.charAt(i));
+            System.out.println(i);
+        }
+        System.out.println();
+        System.out.println(str.length());
         HashMap map = getChars();
         int[] range=new int[2];
-        LinkedHashSet<Integer>ints = new LinkedHashSet();
+        ArrayList ints = new ArrayList();
         HashMap<Integer,int[]> wordLocation= new HashMap();
 
         for (var i = 0; i < str.length(); i++) {
@@ -18,16 +25,11 @@ public class wordIndex2 {
 //head index of the word
                 if (i > 0) {
                     if (map.get(str.charAt(i - 1)) == null) {
-//                        range[0] = i;
-//                        System.out.println(i);
-//                        System.out.println(str.charAt(i));
+
                         ints.add(i);
                     }
                 } else {
 
-//                    range[0] = i;
-//                    System.out.println(i);
-//                    System.out.println(str.charAt(i));
                     ints.add(i);
 
                 }
@@ -36,16 +38,12 @@ public class wordIndex2 {
                 //tail index of the word
                 if (i < str.length() - 1) {
                     if (map.get(str.charAt(i + 1)) == null) {
-//                        range[1] = i;
-//                        System.out.println(i);
-//                        System.out.println(str.charAt(i));
+
                         ints.add(i);
                     }
 
                 } else {
-//                    range[1] = i;
-//                    System.out.println(i);
-//                    System.out.println(str.charAt(i));
+
                     ints.add(i);
                 }
 
@@ -58,6 +56,7 @@ public class wordIndex2 {
 
         Iterator iter = ints.iterator();
         int count=0;
+        System.out.println(ints.size());
         for(int i = 0; i<ints.size()/2;i++){
 
             range[0]=(int)iter.next();
