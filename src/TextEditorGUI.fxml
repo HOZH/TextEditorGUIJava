@@ -39,7 +39,7 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <TextArea fx:id="textArea" layoutY="71.0" prefHeight="389.0" prefWidth="600.0" wrapText="true" />
+        <TextArea fx:id="textArea" editable="false" layoutY="71.0" prefHeight="389.0" prefWidth="600.0" wrapText="true" />
         <TextField fx:id="statusBar" editable="false" layoutY="508.0" prefHeight="0.0" prefWidth="600.0" />
     </children>
 </AnchorPane>

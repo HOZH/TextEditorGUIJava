@@ -5,6 +5,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -21,7 +22,7 @@ public class SpellCheckGUI {
     Button nextButton, previousButton, replaceButton, exitButton, loadButton;
 
     //  HashSet spellErrors;
-    String spellCheckTxt = "";
+    static String spellCheckTxt = "";
     Object[] errorsLocationsArr;
     HashMap<Integer, int[]> wordLocation;
     int[] answer;
@@ -33,21 +34,52 @@ public class SpellCheckGUI {
 
 
     public void getNext() {
-//todo 写个到底的限定条件 下面几行可以单独写  晚点reformat 一下
-        currentLocation = (int) errorsLocationsArr[currentLocationOnErrorArr++];
-        answer = wordLocation.get(currentLocation);
-        textArea.selectRange(answer[0], answer[1] + 1);
+if(currentLocationOnErrorArr<errorsLocationsArr.length-1){
+    //todo 写个到底的限定条件 下面几行可以单独写  晚点reformat 一下
+//        if(currentLocationOnErrorArr==0)
+//        {
+//            currentLocation = (int) errorsLocationsArr[currentLocationOnErrorArr];
+//            currentLocationOnErrorArr=currentLocationOnErrorArr+1;
+//
+//        }else{
+    currentLocation = (int) errorsLocationsArr[++currentLocationOnErrorArr];
+//    }
+    System.out.println("current location is at index"+currentLocation);
+    answer = wordLocation.get(currentLocation);
+    textArea.selectRange(answer[0], answer[1] + 1);
 
 
-        //todo 写个可以回来走的
+    //todo 写个可以回来走的
+}
     }
 
     public void getPrevious() {
+
+      if(currentLocationOnErrorArr>0){
+          currentLocation = (int) errorsLocationsArr[--currentLocationOnErrorArr];
+
+          System.out.println("current location is at index"+currentLocation);
+
+
+          answer = wordLocation.get(currentLocation);
+          textArea.selectRange(answer[0], answer[1] + 1);
+      }
 
     }
 
     public void replace() {
         // todo textProperty String replace
+        spellCheckTxt.substring(answer[0],answer[1]);
+        spellCheckTxt=spellCheckTxt.substring(0,answer[0])+textField.getText()+spellCheckTxt.substring(answer[1]+1);
+        System.out.println(demo.ifModified.getValue());
+        System.out.println(spellCheckTxt+"123");
+
+        //TextEditorGUI.textArea.setText(spellCheckTxt);
+        demo.ifModified.setValue(true);
+        System.out.println(demo.ifModified.getValue());
+        loadTxt();
+
+
     }
 
     public void exit() {
@@ -56,7 +88,7 @@ public class SpellCheckGUI {
     }
 
     public void loadTxt() {
-        currentLocationOnErrorArr = 0;
+        currentLocationOnErrorArr = -1;
         loadSpellChecker();
 
 
@@ -86,17 +118,18 @@ public class SpellCheckGUI {
         }
         errorsLocationsArr = errorLocations.toArray();
 
-        System.out.println(errorsLocationsArr[0]);
-        System.out.println(errorsLocationsArr[1]);
+//        System.out.println("that"+errorsLocationsArr[0]);
+//        System.out.println("this"+errorsLocationsArr[1]);
 
 
        // currentLocationOnErrorArr = 0;
-        currentLocation = (int) errorsLocationsArr[currentLocationOnErrorArr];
+        //fixme no sure if need this line under
+//        currentLocation = (int) errorsLocationsArr[currentLocationOnErrorArr];
         System.out.println(currentLocation);
 
 
         HashMap possibleChars = getChars();
-        possibleChars.keySet().stream().forEach(System.out::print);
+//        possibleChars.keySet().stream().forEach(System.out::print);
 
 
         int[] range = new int[2];
@@ -151,9 +184,32 @@ public class SpellCheckGUI {
         }
         System.out.println(wordLocation.size());
 
+//        System.out.println("-----------------------------------aa");
+//
+//        wordLocation.keySet().stream().forEach(System.out::println);
+//
+//        System.out.println("-----------------------------------aa");
+        //
+        Iterator iter4399=wordLocation.entrySet().iterator();
+        System.out.println(iter4399.next().getClass().getName());
+        System.out.println(Arrays.toString(wordLocation.get(0)));
+        System.out.println(Arrays.toString(wordLocation.get(1)));
+        System.out.println(Arrays.toString(wordLocation.get(2)));
+        System.out.println(Arrays.toString(wordLocation.get(3)));
+        //
+        System.out.println("----------------------------------bbb");
 
-        answer = wordLocation.get(currentLocation);
-        System.out.println(answer[0] + "aa" + answer[1]);
+
+        answer = wordLocation.get(0);
+
+        System.out.println("000000");
+        for(int i=0;i<wordLocation.size();i++)
+        {
+            System.out.println(Arrays.toString(wordLocation.get(i)));
+        }
+
+        System.out.println("000000");
+//        System.out.println(answer[0] + "aa" + answer[1]);
 
         //fixme this part is bug free
 
@@ -177,7 +233,12 @@ public class SpellCheckGUI {
         }
         char dot = '\'';
         map2.put(dot, " ");
-        System.out.println(map2.size());
+//        System.out.println(map2.size());
+//        System.out.println("-------------------------------------");
+//        map2.keySet().stream().forEach(System.out::println);
+
+//        System.out.println("-------------------------------------");
+
         return map2;
     }
 

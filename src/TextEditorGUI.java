@@ -82,8 +82,6 @@ public class TextEditorGUI {
      */
 
 
-
-
     private void popUpSpellCheckWindow() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("SpellCheckGUI.fxml"));
         Stage spellCheckStage = new Stage();
@@ -94,8 +92,7 @@ public class TextEditorGUI {
 
     public void spellCheck() throws IOException {
         popUpSpellCheckWindow();
-        System.out.println("the size of dictionary is"+demo.dictionary.size() );
-
+        System.out.println("the size of dictionary is" + demo.dictionary.size());
 
 
     }
@@ -152,7 +149,7 @@ public class TextEditorGUI {
             if (x.length() >= 3
                     &&
                     x.substring(0, x.length() - 2).matches("[AEIOUaeiouyY]+")
-                    && ((x.endsWith("e") && x .charAt(x.length() - 2) != 'l') || x.endsWith("es") || x.endsWith("ed"))) {
+                    && ((x.endsWith("e") && x.charAt(x.length() - 2) != 'l') || x.endsWith("es") || x.endsWith("ed"))) {
                 //   System.out.println(x);
                 return null;
 
@@ -237,11 +234,12 @@ public class TextEditorGUI {
     }
 
     public void newFile() throws IOException {
+        textArea.setEditable(true);
 
         tempFile = File.createTempFile("tempfile", "txt");
         currentFile = tempFile;
-//        System.out.println(currentFile==tempFile);
         onFlyInspector();
+        afterExitSpellCheckStage();
     }
 
     private void fileChooserWindow() {
@@ -251,12 +249,15 @@ public class TextEditorGUI {
     }
 
     public void openFile() throws FileNotFoundException {
+        textArea.setEditable(true);
+
 
         fileChooserWindow();
-
+        System.out.println("once upon the time");
         load();
         analyze();
         onFlyInspector();
+        afterExitSpellCheckStage();
 
 
     }
@@ -267,6 +268,8 @@ public class TextEditorGUI {
         textArea.setText("");
         currentFile = null;
         statusBar.setText("");
+        textArea.setEditable(false);
+
     }
 
     public void saveFile() throws FileNotFoundException {
@@ -367,7 +370,7 @@ public class TextEditorGUI {
         Button add = new Button("submit");
         Button generate = new Button("generate");
         TextField textField = new TextField();
-        
+
 
         textField.setPromptText("input the key word here (String)");
         TextField textField1 = new TextField();
@@ -386,8 +389,8 @@ public class TextEditorGUI {
         });
         add.setOnAction(event1 -> {
             try {
-inputString=textField.getText();
-inputLength=Integer.valueOf(textField1.getText());
+                inputString = textField.getText();
+                inputLength = Integer.valueOf(textField1.getText());
 //                formMarkov();
                 generateMarkov();
             } catch (NumberFormatException ex) {
@@ -492,6 +495,45 @@ inputLength=Integer.valueOf(textField1.getText());
 
 
     }
+
+//    public void afterExitSpellCheckerStage(){
+//
+////        textArea.setText(SpellCheckGUI.spellCheckTxt);
+//        demo.ifModified.addListener();
+//        if(demo.ifModified)
+//        {
+//            textArea.setText(SpellCheckGUI.spellCheckTxt);
+//            demo.ifModified=false;
+//        }
+//
+//    }
+
+    public void afterExitSpellCheckStage(){
+        demo.ifModified.addListener(e->{
+            textArea.setText(SpellCheckGUI.spellCheckTxt);
+            demo.ifModified.setValue(false);
+//            textArea.setText(demo.ifModified.getValue().toString());
+
+        });
+    }
+
+//    private void onFlyInspector() {
+//        // textArea.focusedProperty()
+//        textArea.textProperty().addListener((obs, oldValue, newValue) -> {
+//
+//            if (oldValue != null) {
+//
+//                System.out.println(textArea.getText());
+//                currentTxt = textArea.getText();
+//                analyze();
+//                statusMsg = "Found " + sentenceCount + " sentences and " + wordCount + " words and the flesch score is " + fleschScore;
+//                statusBar.setText(statusMsg);
+//                System.out.println(statusMsg);
+//            }
+//
+//        });
+//    }
+
 
 
 }
