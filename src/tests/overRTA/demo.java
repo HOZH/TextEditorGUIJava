@@ -14,7 +14,7 @@ public class demo extends Application {
 
         TextA textA = new TextA();
         textA.setEditable(false);
-        Text text  = new Text();
+        Text text = new Text();
 
         textA.setText("11111111111111111111");
 //        textA.setStyle("-fx-border-color: black, transparent, black;");
@@ -22,9 +22,8 @@ public class demo extends Application {
         TextFlow textFlow = new TextFlow();
 //        textFlow.
 
-        textA.selectRange(3,4);
+        textA.selectRange(3, 4);
         //textA.selectRange(6,7);
-
 
 
         vBox.getChildren().add(textA);

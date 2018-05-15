@@ -2,6 +2,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -22,33 +25,26 @@ import java.util.regex.Pattern;
  */
 public class TextEditorGUI {
 
+    public static String currentTxt = "";
     @FXML
     MenuBar menuBar;
-
     @FXML
     Menu fileMenu, viewMenu, editMenu;
-
     @FXML
     MenuItem newButton, openButton, closeButton, saveButton, exitButton;
-
     @FXML
-    MenuItem wordCountButton, sentenceCountButton, fleschScoreButton;
-
+    MenuItem wordCountButton, sentenceCountButton, fleschScoreButton, performanceButton;
     @FXML
     MenuItem copyButton, cutButton, deleteButton, pasteButton, markovButton, spellCheckButton;
-
     @FXML
     TextArea textArea;
-
     @FXML
     TextField statusBar;
-
     private File currentFile;
     private File tempFile;
     private FileChooser fileChooser = new FileChooser();
     private Scanner scanner;
     private StringBuilder inputTxt;
-    public static String currentTxt = "";
     private PrintWriter printWriter;
 //    private String=
 
@@ -76,7 +72,6 @@ public class TextEditorGUI {
 
     private Iterator<String> iterator;
     private ListIterator iter1 = new ListIterator(masterList);
-    ;
     private ListIterator iter2 = new ListIterator(masterList);
     private Random random = new Random();
 
@@ -538,7 +533,7 @@ public class TextEditorGUI {
      * mapping the words into markov
      */
 
-    public void generateMarkov() {
+    private void generateMarkov() {
 
         iter1.reset();
         iter2.reset();
@@ -580,7 +575,7 @@ public class TextEditorGUI {
      * @return word in the root link and followed by its adjacent word
      */
 
-    public String randomWord(Link key) {
+    private String randomWord(Link key) {
 
         String lalala = (String) key.getBabies().getFirst().getdata();
         ListIterator iter = new ListIterator(key.getBabies());
@@ -615,7 +610,7 @@ public class TextEditorGUI {
     /**
      * listener for spell checker, sending back the modified data from spell check to the text editor
      */
-    public void afterExitSpellCheckStage() {
+    private void afterExitSpellCheckStage() {
         demo.ifModified.addListener(e -> {
             textArea.setText(SpellCheckGUI.spellCheckTxt);
             demo.ifModified.setValue(false);
@@ -646,40 +641,144 @@ public class TextEditorGUI {
      * compare the performances differences in calculating the numbers of sentences, words,
      * and syllables in one loop versus in three separate loops of 4 different lengths of words, then record them
      * into a .txt file in the outputData subfolder in the project folder.
+     * considering it only deal with single case, it's partially hard coded
      *
      * @throws FileNotFoundException
      * @see TextEditorGUI#analyze()
      * @see TextEditorGUI#analyzeWith3Loops()
      * @see TextEditorGUI#svtHelper(int)
+     * @see TextEditorGUI#getLineChart(int[][], int[][])
      */
     public void singleLoopVSThreeLoops() throws FileNotFoundException {
+        int singleLoopTime = 0;
+        int threeLoopsTime = 0;
+
+        var singleLoopData = new int[4][2];
+        var threeLoopsData = new int[4][2];
+
+
         currentTxt = svtHelper(100);
         var strBuilder = new StringBuilder();
-        var timeUsed = "single loop cost " + analyze() + " millisecond on " + 100 + " words and three loops cost " + analyzeWith3Loops() + " millisecond.";
+        singleLoopTime = (int) analyze();
+        threeLoopsTime = (int) analyzeWith3Loops();
+        analyzeWith3Loops();
+        var timeUsed = "single loop cost " + singleLoopTime + " millisecond on " + 100 + " words and three loops cost " + threeLoopsTime + " millisecond.";
         strBuilder.append(timeUsed);
         strBuilder.append("\n");
+
+        singleLoopData[0][0] = 100;
+        threeLoopsData[0][0] = 100;
+        singleLoopData[0][1] = singleLoopTime;
+        threeLoopsData[0][1] = threeLoopsTime;
 
 
         currentTxt = svtHelper(1000);
-        timeUsed = "single loop cost " + analyze() + " millisecond on " + 1000 + " words and three loops cost " + analyzeWith3Loops() + " millisecond.";
+        singleLoopTime = (int) analyze();
+        threeLoopsTime = (int) analyzeWith3Loops();
+
+        timeUsed = "single loop cost " + singleLoopTime + " millisecond on " + 1000 + " words and three loops cost " + threeLoopsTime + " millisecond.";
 
         strBuilder.append(timeUsed);
         strBuilder.append("\n");
+
+        singleLoopData[1][0] = 1000;
+        threeLoopsData[1][0] = 1000;
+        singleLoopData[1][1] = singleLoopTime;
+        threeLoopsData[1][1] = threeLoopsTime;
+
         currentTxt = svtHelper(10000);
-        timeUsed = "single loop cost " + analyze() + " millisecond on " + 10000 + " words and three loops cost " + analyzeWith3Loops() + " millisecond.";
+        singleLoopTime = (int) analyze();
+        threeLoopsTime = (int) analyzeWith3Loops();
+
+        timeUsed = "single loop cost " + singleLoopTime + " millisecond on " + 10000 + " words and three loops cost " + threeLoopsTime + " millisecond.";
 
         strBuilder.append(timeUsed);
         strBuilder.append("\n");
+
+        singleLoopData[2][0] = 10000;
+        threeLoopsData[2][0] = 10000;
+        singleLoopData[2][1] = singleLoopTime;
+        threeLoopsData[2][1] = threeLoopsTime;
+
         currentTxt = svtHelper(100000);
-        timeUsed = "single loop cost " + analyze() + " millisecond on " + 100000 + " words and three loops cost " + analyzeWith3Loops() + " millisecond.";
+        singleLoopTime = (int) analyze();
+        threeLoopsTime = (int) analyzeWith3Loops();
+        timeUsed = "single loop cost " + singleLoopTime + " millisecond on " + 100000 + " words and three loops cost " + threeLoopsTime + " millisecond.";
 
         strBuilder.append(timeUsed);
         strBuilder.append("\n");
+
+        singleLoopData[3][0] = 100000;
+        threeLoopsData[3][0] = 100000;
+        singleLoopData[3][1] = singleLoopTime;
+        threeLoopsData[3][1] = threeLoopsTime;
 
         var thePrintWriter = new PrintWriter("src/outputData/3LoopsVS1Loop.txt");
         thePrintWriter.write(strBuilder.toString());
         thePrintWriter.flush();
 
+        getLineChart(singleLoopData, threeLoopsData);
+
+
+//        var  aFile = new File("src/outputData/3LoopsVS1Loop.txt");
+//        var lalalaScanner = new Scanner(aFile);
+//
+//        ArrayList<Integer> intss = new ArrayList<Integer>();
+//
+//        while(lalalaScanner.hasNextInt())
+//        {
+//            System.out.println(lalalaScanner.nextInt());
+//        }
+//
+
+
+    }
+
+    /**
+     * get a line chart that shows performance differences between single loop and three loops
+     *
+     * @param series1 int[][] for data of single loop performance
+     * @param series2 int[][] for data of three loop performance
+     */
+    private void getLineChart(int[][] series1, int[][] series2) {
+
+        NumberAxis xAxis = new NumberAxis(0, 100000, 100);
+        NumberAxis yAxis = new NumberAxis(0, 1500, 5);
+        xAxis.setLabel("amount of words");
+        yAxis.setLabel("time used in milliseconds");
+
+        XYChart xyChart = new LineChart(xAxis, yAxis);
+
+        XYChart.Series singleLoop = new XYChart.Series();
+        XYChart.Series threeLoops = new XYChart.Series();
+
+        singleLoop.setName("singleLoop");
+
+        for (int i = 0; i < series1.length; i++) {
+            singleLoop.getData().add(new XYChart.Data<>(series1[i][0], series1[i][1]));
+            threeLoops.getData().add(new XYChart.Data<>(series2[i][0], series1[2][1]));
+
+        }
+
+
+//        singleLoop.getData().addAll(new XYChart.Data<>(100, 10), new XYChart.Data<>(1000, 100), new XYChart.Data<>(10000, 4857));
+
+        threeLoops.setName("threeLoops");
+
+//        threeLoops.getData().addAll(new XYChart.Data<>(200, 100), new XYChart.Data<>(3000, 1000), new XYChart.Data<>(9000, 6980));
+
+        VBox vBox = new VBox();
+        vBox.getChildren().add(xyChart);
+
+        Scene chartScene = new Scene(vBox);
+
+        Stage chartStage = new Stage();
+
+        chartStage.setScene(chartScene);
+        chartStage.show();
+
+
+        xyChart.getData().addAll(singleLoop, threeLoops);
 
     }
 
@@ -690,7 +789,7 @@ public class TextEditorGUI {
      * @return pre-determined length string from warAndPeace
      * @see TextEditorGUI#singleLoopVSThreeLoops()
      */
-    public String svtHelper(int length) throws FileNotFoundException {
+    private String svtHelper(int length) throws FileNotFoundException {
         var limitingAgent = length;
         var txtUsing = "";
         var theFile = new File("src/inputData/warAndPeace.txt");
@@ -707,7 +806,6 @@ public class TextEditorGUI {
         }
 
         HashMap possibleChars = SpellCheckGUI.getChars();
-
 
 
         ArrayList ints = new ArrayList();
@@ -744,12 +842,11 @@ public class TextEditorGUI {
 
         }
 
-      int endingIndex=(int)ints.get(length*2-1);
+        int endingIndex = (int) ints.get(length * 2 - 1);
 
-       txtUsing= theInputTxt.toString().substring(0,endingIndex);
+        txtUsing = theInputTxt.toString().substring(0, endingIndex);
 
-       return txtUsing;
-
+        return txtUsing;
 
 
     }

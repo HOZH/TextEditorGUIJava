@@ -2,7 +2,6 @@ package tests.overRTA;
 
 //import javafx.graphics
 //import com.sun.javafx.util.Utils;
-import javafx.scene.control.TextFormatter;
 
 public class TextA extends javafx.scene.control.TextArea {
 

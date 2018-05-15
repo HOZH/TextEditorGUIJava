@@ -22,9 +22,8 @@ public class highLight extends Application {
 
 
 //        ta.getStylesheets().add("src/tests/temp.css");
-        ta.selectRange(2,4);
-        ta.selectRange(6,7);
-
+        ta.selectRange(2, 4);
+        ta.selectRange(6, 7);
 
 
         vBox.getChildren().add(ta);

@@ -10,6 +10,27 @@ import java.io.File;
 import java.util.*;
 
 public class spellCheckGUI extends Application {
+    private static HashMap getChars() {
+
+        HashMap map2 = new HashMap();
+
+        for (char i = 'A'; i <= 'Z'; i++) {
+            map2.put(i, " ");
+
+
+        }
+
+        for (char i = 'a'; i <= 'z'; i++) {
+            map2.put(i, " ");
+
+
+        }
+        char dot = '\'';
+        map2.put(dot, " ");
+        System.out.println(map2.size());
+        return map2;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -20,13 +41,6 @@ public class spellCheckGUI extends Application {
         while (scanner.hasNext()) {
             map.put(scanner.next(), "");
         }
-
-
-
-
-
-
-
 
 
         String txt = "once upods the time there is a mavn whose nawame is mike he is a male lalala";
@@ -42,26 +56,17 @@ public class spellCheckGUI extends Application {
             }
 
         }
-        var errorsLocationsArr =errorLocations.toArray();
-        int location= (int)errorsLocationsArr[1];
-
-
-
-
-
-
-
-
+        var errorsLocationsArr = errorLocations.toArray();
+        int location = (int) errorsLocationsArr[1];
 
 
         HashMap map1 = getChars();
-        int[] range=new int[2];
+        int[] range = new int[2];
         ArrayList ints = new ArrayList();
-        HashMap<Integer,int[]> wordLocation= new HashMap();
+        HashMap<Integer, int[]> wordLocation = new HashMap();
 
         for (var i = 0; i < txt.length(); i++) {
             if (map1.get(txt.charAt(i)) != null) {
-
 
 
 //head index of the word
@@ -101,29 +106,26 @@ public class spellCheckGUI extends Application {
             }
 
 
-
         }
         System.out.println(ints.size());
 
         Iterator iter = ints.iterator();
-        int count=0;
-        for(int i = 0; i<ints.size()/2;i++){
+        int count = 0;
+        for (int i = 0; i < ints.size() / 2; i++) {
 
-            range[0]=(int)iter.next();
-            range[1]=(int)iter.next();
-            System.out.println(range[0]+ " "+ range[1]);
-            wordLocation.put(count++,range);
-            range=new int[2];
+            range[0] = (int) iter.next();
+            range[1] = (int) iter.next();
+            System.out.println(range[0] + " " + range[1]);
+            wordLocation.put(count++, range);
+            range = new int[2];
 //            System.out.println((int)iter.next());
 //            System.out.println((int)iter.next());
         }
 
 //        arrayList.txteam().forEach(x-> System.out.println(x[0]+" "+x[1]));
 
-        int [] answer = wordLocation.get(location);
+        int[] answer = wordLocation.get(location);
         Arrays.stream(answer).forEach(System.out::println);
-
-
 
 
         var vBox = new VBox();
@@ -131,7 +133,7 @@ public class spellCheckGUI extends Application {
         var ta = new TextArea();
         ta.setText(txt);
 
-        ta.selectRange(answer[0],answer[1]);
+        ta.selectRange(answer[0], answer[1]);
 
 
         vBox.getChildren().add(ta);
@@ -142,31 +144,5 @@ public class spellCheckGUI extends Application {
         primaryStage.show();
 
 
-
-
-
-    }
-
-
-
-    private static HashMap getChars() {
-
-        HashMap map2 = new HashMap();
-
-        for (char i = 'A'; i <= 'Z'; i++) {
-            map2.put(i, " ");
-
-
-        }
-
-        for (char i = 'a'; i <= 'z'; i++) {
-            map2.put(i, " ");
-
-
-        }
-        char dot = '\'';
-        map2.put(dot, " ");
-        System.out.println(map2.size());
-        return map2;
     }
 }

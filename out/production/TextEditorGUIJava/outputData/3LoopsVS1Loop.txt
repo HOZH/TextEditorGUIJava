@@ -1,4 +1,4 @@
-single loop cost 7 millisecond on 106 words and three loops cost 3 millisecond.
-single loop cost 14 millisecond on 1031 words and three loops cost 9 millisecond.
-single loop cost 23 millisecond on 10241 words and three loops cost 82 millisecond.
-single loop cost 119 millisecond on 102342 words and three loops cost 287 millisecond.
+single loop cost 6 millisecond on 100 words and three loops cost 4 millisecond.
+single loop cost 12 millisecond on 1000 words and three loops cost 7 millisecond.
+single loop cost 18 millisecond on 10000 words and three loops cost 27 millisecond.
+single loop cost 217 millisecond on 100000 words and three loops cost 176 millisecond.

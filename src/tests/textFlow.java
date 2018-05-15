@@ -20,21 +20,12 @@ public class textFlow extends Application {
         textFlow.getChildren().add(text1);
 
 
-
-
-
-
-
-
-
         vbox.getChildren().add(textFlow);
 
         Scene scene = new Scene(vbox);
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
 
 
     }

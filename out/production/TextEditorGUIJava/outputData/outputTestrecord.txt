@@ -1,0 +1,1 @@
+single loop cost 14 millisecond on 928 words and three loops cost 46 millisecond.

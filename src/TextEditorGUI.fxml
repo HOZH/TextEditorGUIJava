@@ -25,6 +25,7 @@
                         <MenuItem fx:id="wordCountButton" mnemonicParsing="false" onAction="#wordCounter" text="Word Count" />
                         <MenuItem fx:id="sentenceCountButton" mnemonicParsing="false" onAction="#sentenceCounter" text="Sentence Count" />
                         <MenuItem fx:id="fleschScoreButton" mnemonicParsing="false" onAction="#fleschScoreGetter" text="Flesch Score" />
+                        <MenuItem fx:id="performanceButton" mnemonicParsing="false" onAction="#singleLoopVSThreeLoops" text="Performance Test" />
                     </items>
                 </Menu>
                 <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
@@ -34,7 +35,7 @@
                         <MenuItem fx:id="pasteButton" mnemonicParsing="false" onAction="#paste" text="Paste" />
                         <MenuItem fx:id="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete" />
                         <MenuItem fx:id="markovButton" mnemonicParsing="false" onAction="#markov" text="Markov" />
-                  <MenuItem fx:id="spellCheckButton" mnemonicParsing="false" onAction="#spellCheck" text="SpellCheck" />
+                        <MenuItem fx:id="spellCheckButton" mnemonicParsing="false" onAction="#spellCheck" text="SpellCheck" />
                     </items>
                 </Menu>
             </menus>

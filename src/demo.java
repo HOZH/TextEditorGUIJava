@@ -18,23 +18,11 @@ public class demo extends Application {
     // dic
     public static File dictionaryFile = new File("src/dictionary.txt");
     public static HashMap dictionary;
-    public static BooleanProperty ifModified= new SimpleBooleanProperty(false);
-
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-
-
-        Parent root = FXMLLoader.load(getClass().getResource("TextEditorGUI.fxml"));
-        primaryStage.setTitle("Text Editor");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
-        loadDictionary();
-
-    }
+    public static BooleanProperty ifModified = new SimpleBooleanProperty(false);
 
     /**
      * load the dictionary from .txt file into hashMap
+     *
      * @throws FileNotFoundException
      */
     public static void loadDictionary() throws FileNotFoundException {
@@ -47,6 +35,17 @@ public class demo extends Application {
         }
 
 
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+
+        Parent root = FXMLLoader.load(getClass().getResource("TextEditorGUI.fxml"));
+        primaryStage.setTitle("Text Editor");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+        loadDictionary();
 
     }
 
@@ -86,6 +85,7 @@ todo set defualt textArea not editable
 todo save speed of 4 kinds of words
 todo 3 loops and single loop
 todo rewrite markov with binary search tree
+todo plot performancd in the line chart
 todo update comments
 todo /if i have time convert this code to java 8 version
  */

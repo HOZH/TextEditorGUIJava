@@ -10,8 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
-
-public class gui extends Application{
+public class gui extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -21,17 +20,20 @@ public class gui extends Application{
         textArea.setText(booleanProperty.getValue().toString());
         Button button = new Button("change");
 
-        button.setOnAction(event -> {booleanProperty.setValue(!booleanProperty.get()); textArea.setText(booleanProperty.getValue().toString());});
+        button.setOnAction(event -> {
+            booleanProperty.setValue(!booleanProperty.get());
+            textArea.setText(booleanProperty.getValue().toString());
+        });
 
-        booleanProperty.addListener((e,oldvalue,newvalue)->{
+        booleanProperty.addListener((e, oldvalue, newvalue) -> {
             System.out.println("changed");
-            System.out.println("old ="+oldvalue.toString());
-            System.out.println("new ="+newvalue.toString());
+            System.out.println("old =" + oldvalue.toString());
+            System.out.println("new =" + newvalue.toString());
         });
 
         VBox vBox = new VBox();
 
-        vBox.getChildren().addAll(textArea,button);
+        vBox.getChildren().addAll(textArea, button);
 
         Scene scene = new Scene(vBox);
 

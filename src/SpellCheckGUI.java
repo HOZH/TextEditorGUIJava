@@ -25,12 +25,12 @@ public class SpellCheckGUI {
     Button nextButton, previousButton, replaceButton, exitButton, loadButton;
 
     //  HashSet spellErrors;
-    static String spellCheckTxt = "";
-    Object[] errorsLocationsArr;
-    HashMap<Integer, int[]> wordLocation;
-    int[] answer;
-    int currentLocationOnErrorArr;
-    int currentLocation;
+    public static String spellCheckTxt = "";
+    private Object[] errorsLocationsArr;
+    private HashMap<Integer, int[]> wordLocation;
+    private int[] answer;
+    private int currentLocationOnErrorArr;
+    private int currentLocation;
     ArrayList<Integer> errorLocations = new ArrayList<Integer>();
 
 

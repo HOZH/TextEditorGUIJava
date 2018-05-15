@@ -1,9 +1,7 @@
 package tests;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class textSelectMultiple extends Application {
@@ -16,6 +14,7 @@ public class textSelectMultiple extends Application {
 
 
     }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 //        VBox vBox = new VBox();
