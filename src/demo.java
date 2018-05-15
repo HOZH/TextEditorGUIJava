@@ -11,6 +11,9 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * @author hz
+ */
 public class demo extends Application {
     // dic
     public static File dictionaryFile = new File("src/dictionary.txt");
@@ -30,7 +33,10 @@ public class demo extends Application {
 
     }
 
-
+    /**
+     * load the dictionary from .txt file into hashMap
+     * @throws FileNotFoundException
+     */
     public static void loadDictionary() throws FileNotFoundException {
 
         dictionary = new HashMap();

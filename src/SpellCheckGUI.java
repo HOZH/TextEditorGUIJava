@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * @author hz
+ */
 public class SpellCheckGUI {
 
 
@@ -31,8 +34,10 @@ public class SpellCheckGUI {
     ArrayList<Integer> errorLocations = new ArrayList<Integer>();
 
 
-
-
+    /**
+     * get to the next incorrect spelling word
+     *
+     */
     public void getNext() {
 if(currentLocationOnErrorArr<errorsLocationsArr.length-1){
     //todo 写个到底的限定条件 下面几行可以单独写  晚点reformat 一下
@@ -53,6 +58,9 @@ if(currentLocationOnErrorArr<errorsLocationsArr.length-1){
 }
     }
 
+    /**
+     *  get to the previous miss spelling word
+     */
     public void getPrevious() {
 
       if(currentLocationOnErrorArr>0){
@@ -67,6 +75,10 @@ if(currentLocationOnErrorArr<errorsLocationsArr.length-1){
 
     }
 
+
+    /**
+     *  replace selected word with string from textField
+     */
     public void replace() {
         // todo textProperty String replace
         spellCheckTxt.substring(answer[0],answer[1]);
@@ -82,11 +94,18 @@ if(currentLocationOnErrorArr<errorsLocationsArr.length-1){
 
     }
 
+    /**
+     *  exit the spell checker
+     */
     public void exit() {
         Stage stage = (Stage) exitButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     *   main function of spell checker
+     *   @see SpellCheckGUI#loadSpellChecker()
+     */
     public void loadTxt() {
         currentLocationOnErrorArr = -1;
         loadSpellChecker();
@@ -94,14 +113,17 @@ if(currentLocationOnErrorArr<errorsLocationsArr.length-1){
 
     }
 
-
+    /**
+     *  fire a spell checker
+     *  @see SpellCheckGUI#getChars()
+     */
     public void loadSpellChecker() {
 
         spellCheckTxt = TextEditorGUI.currentTxt;
         textArea.setText(spellCheckTxt);
 
 
-        String[] words = spellCheckTxt.split(",\\s*|\\s|\\.\\s*");
+        String[] words = spellCheckTxt.trim().split(",\\s*|\\s+|\\.\\s*");
 
 
         errorLocations = new ArrayList<Integer>();
@@ -125,7 +147,7 @@ if(currentLocationOnErrorArr<errorsLocationsArr.length-1){
        // currentLocationOnErrorArr = 0;
         //fixme no sure if need this line under
 //        currentLocation = (int) errorsLocationsArr[currentLocationOnErrorArr];
-        System.out.println(currentLocation);
+//        System.out.println(currentLocation);
 
 
         HashMap possibleChars = getChars();
@@ -216,7 +238,12 @@ if(currentLocationOnErrorArr<errorsLocationsArr.length-1){
 
     }
 
-    private HashMap getChars() {
+
+    /**
+     *
+     * @return a hashMap that contains all the letters and ,
+     */
+    public static HashMap getChars() {
 
         HashMap map2 = new HashMap();
 
@@ -233,6 +260,7 @@ if(currentLocationOnErrorArr<errorsLocationsArr.length-1){
         }
         char dot = '\'';
         map2.put(dot, " ");
+//        map2.put('-'," ");
 //        System.out.println(map2.size());
 //        System.out.println("-------------------------------------");
 //        map2.keySet().stream().forEach(System.out::println);

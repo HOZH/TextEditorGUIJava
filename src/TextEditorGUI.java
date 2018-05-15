@@ -17,6 +17,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+/**
+ * @author hz
+ */
 public class TextEditorGUI {
 
     @FXML
@@ -81,7 +84,11 @@ public class TextEditorGUI {
     for spell check using
      */
 
-
+    /**
+     * Pop up a new stage for spell checker
+     *
+     * @throws IOException
+     */
     private void popUpSpellCheckWindow() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("SpellCheckGUI.fxml"));
         Stage spellCheckStage = new Stage();
@@ -90,12 +97,23 @@ public class TextEditorGUI {
         spellCheckStage.show();
     }
 
+    /**
+     * main function for spell checker
+     *
+     * @throws IOException
+     */
     public void spellCheck() throws IOException {
         popUpSpellCheckWindow();
         System.out.println("the size of dictionary is" + demo.dictionary.size());
 
 
     }
+
+    /**
+     * load .txt file into the editor
+     *
+     * @throws FileNotFoundException
+     */
 
     private void load() throws FileNotFoundException {
         scanner = new Scanner(currentFile);
@@ -113,19 +131,28 @@ public class TextEditorGUI {
 
     }
 
+    /**
+     * set words count
+     */
     private void wordC() {
         String words = currentTxt;
-        String[] strs = words.split(",\\s*|\\s|\\.\\s*");
+        String[] strs = words.trim().split(",\\s*|\\s+|\\.\\s*");
         wordCount = (int) Arrays.stream(strs).count();
 
     }
 
+    /**
+     * set sentences count
+     */
     private void sentenceC() {
         String words = currentTxt;
         sentenceCount = words.split("!|\\.|\\?").length;
 
     }
 
+    /**
+     * set syllables count
+     */
     private void syllableC() {
 
         String words = currentTxt;
@@ -161,6 +188,12 @@ public class TextEditorGUI {
         syllableCount = syllablesNum;
     }
 
+    /**
+     * @return time used in millisecond for text analyzing with 3 loops
+     * @see TextEditorGUI#wordC();
+     * @see TextEditorGUI#sentenceC()
+     * @see TextEditorGUI#syllableC()
+     */
     public long analyzeWith3Loops() {
         var timeConSumed = System.currentTimeMillis();
         wordC();
@@ -175,6 +208,9 @@ public class TextEditorGUI {
 
     }
 
+    /**
+     * @return time used in millisecond for text analyzing with single loop
+     */
     public long analyze() {
 
         var timeConSumed = System.currentTimeMillis();
@@ -190,7 +226,7 @@ public class TextEditorGUI {
             count++;
         }
 
-        String[] strs = words.split(",\\s*|\\s|\\.\\s*");
+        String[] strs = words.trim().split(",\\s*|\\s+|\\.\\s*");
         long silent = Arrays.stream(strs).map(x -> {
             if (x.length() >= 3
                     &&
@@ -215,7 +251,9 @@ public class TextEditorGUI {
 
     }
 
-
+    /**
+     * fire a on-fly inspector text status
+     */
     private void onFlyInspector() {
         // textArea.focusedProperty()
         textArea.textProperty().addListener((obs, oldValue, newValue) -> {
@@ -233,6 +271,12 @@ public class TextEditorGUI {
         });
     }
 
+    /**
+     * create a temp file that can be save later and set the main textArea to editable
+     *
+     * @throws IOException
+     */
+
     public void newFile() throws IOException {
         textArea.setEditable(true);
 
@@ -242,12 +286,21 @@ public class TextEditorGUI {
         afterExitSpellCheckStage();
     }
 
+    /**
+     * main function for the fileChooser
+     */
     private void fileChooserWindow() {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(extFilter);
         currentFile = fileChooser.showOpenDialog(new Stage());
     }
 
+
+    /**
+     * open an existing .txt file and load it to the editor
+     *
+     * @throws FileNotFoundException
+     */
     public void openFile() throws FileNotFoundException {
         textArea.setEditable(true);
 
@@ -263,15 +316,24 @@ public class TextEditorGUI {
     }
     //fixme still need to implement the top edit menu
 
-
-    public void closeFile() {
+    /**
+     * close current editing， wipe the textArea and set it non-editable
+     */
+    public void closeFile() throws FileNotFoundException {
         textArea.setText("");
         currentFile = null;
         statusBar.setText("");
         textArea.setEditable(false);
+//        singleLoopVSThreeLoops();
 
     }
 
+    /**
+     * for temp file: open the file chooser and let user choose the dir to save
+     * for existing file: save the modified text back to the original file
+     *
+     * @throws FileNotFoundException
+     */
     public void saveFile() throws FileNotFoundException {
         if (currentFile == tempFile) {
             fileChooserWindow();
@@ -312,29 +374,46 @@ public class TextEditorGUI {
 
     }
 
+    /**
+     * close the program
+     */
     public void exitFile() {
 
         System.exit(0);
     }
 
-
+    /**
+     * counter fire by button in the view menu
+     */
     public void wordCounter() {
         statusBar.setText("Found " + wordCount + " words in the txt");
     }
 
+    /**
+     * counter fire by button in the view menu
+     */
     public void sentenceCounter() {
         statusBar.setText("Found " + sentenceCount + " sentences in the txt");
     }
 
+    /**
+     * counter fire by button in the view menu
+     */
     public void fleschScoreGetter() {
         statusBar.setText("The flesch score of this txt is " + fleschScore);
     }
 
-
+    /**
+     * fire by button in the edit menu, copy the whole text in the textArea
+     */
     public void copy() {
         clipBoard = textArea.getText();
         statusBar.setText("copied");
     }
+
+    /**
+     * fire by button in the edit menu, cut the whole text into a temporary clipboard
+     */
 
     public void cut() {
         clipBoard = textArea.getText();
@@ -342,15 +421,25 @@ public class TextEditorGUI {
         statusBar.setText("cut");
     }
 
+    /**
+     * fire by button in the edit menu, delete text in the textArea
+     */
     public void delete() {
         statusBar.setText("deleted");
     }
 
+    /**
+     * fire by button in the edit menu, wipe the current context and paste the text that store in the clipboard into the textarea
+     */
     public void paste() {
         textArea.setText(clipBoard);
         statusBar.setText("pasted");
 
     }
+
+    /**
+     * main function for markov
+     */
 
     public void markov() {
         popUp();
@@ -358,6 +447,9 @@ public class TextEditorGUI {
 
     }
 
+    /**
+     * pop up a single stage for markov
+     */
 
     private void popUp() {
         final Stage dialog = new Stage();
@@ -408,6 +500,9 @@ public class TextEditorGUI {
 
     }
 
+    /**
+     * set the textArea text to the random string that form by markov function
+     */
 
     private void formMarkov() {
 
@@ -438,6 +533,10 @@ public class TextEditorGUI {
 
 
     }
+
+    /**
+     * mapping the words into markov
+     */
 
     public void generateMarkov() {
 
@@ -476,6 +575,10 @@ public class TextEditorGUI {
         textArea.setText(result);
     }
 
+    /**
+     * @param key: root link
+     * @return word in the root link and followed by its adjacent word
+     */
 
     public String randomWord(Link key) {
 
@@ -508,8 +611,12 @@ public class TextEditorGUI {
 //
 //    }
 
-    public void afterExitSpellCheckStage(){
-        demo.ifModified.addListener(e->{
+
+    /**
+     * listener for spell checker, sending back the modified data from spell check to the text editor
+     */
+    public void afterExitSpellCheckStage() {
+        demo.ifModified.addListener(e -> {
             textArea.setText(SpellCheckGUI.spellCheckTxt);
             demo.ifModified.setValue(false);
 //            textArea.setText(demo.ifModified.getValue().toString());
@@ -534,6 +641,118 @@ public class TextEditorGUI {
 //        });
 //    }
 
+
+    /**
+     * compare the performances differences in calculating the numbers of sentences, words,
+     * and syllables in one loop versus in three separate loops of 4 different lengths of words, then record them
+     * into a .txt file in the outputData subfolder in the project folder.
+     *
+     * @throws FileNotFoundException
+     * @see TextEditorGUI#analyze()
+     * @see TextEditorGUI#analyzeWith3Loops()
+     * @see TextEditorGUI#svtHelper(int)
+     */
+    public void singleLoopVSThreeLoops() throws FileNotFoundException {
+        currentTxt = svtHelper(100);
+        var strBuilder = new StringBuilder();
+        var timeUsed = "single loop cost " + analyze() + " millisecond on " + 100 + " words and three loops cost " + analyzeWith3Loops() + " millisecond.";
+        strBuilder.append(timeUsed);
+        strBuilder.append("\n");
+
+
+        currentTxt = svtHelper(1000);
+        timeUsed = "single loop cost " + analyze() + " millisecond on " + 1000 + " words and three loops cost " + analyzeWith3Loops() + " millisecond.";
+
+        strBuilder.append(timeUsed);
+        strBuilder.append("\n");
+        currentTxt = svtHelper(10000);
+        timeUsed = "single loop cost " + analyze() + " millisecond on " + 10000 + " words and three loops cost " + analyzeWith3Loops() + " millisecond.";
+
+        strBuilder.append(timeUsed);
+        strBuilder.append("\n");
+        currentTxt = svtHelper(100000);
+        timeUsed = "single loop cost " + analyze() + " millisecond on " + 100000 + " words and three loops cost " + analyzeWith3Loops() + " millisecond.";
+
+        strBuilder.append(timeUsed);
+        strBuilder.append("\n");
+
+        var thePrintWriter = new PrintWriter("src/outputData/3LoopsVS1Loop.txt");
+        thePrintWriter.write(strBuilder.toString());
+        thePrintWriter.flush();
+
+
+    }
+
+    /**
+     * helper method
+     *
+     * @param length limited length of string
+     * @return pre-determined length string from warAndPeace
+     * @see TextEditorGUI#singleLoopVSThreeLoops()
+     */
+    public String svtHelper(int length) throws FileNotFoundException {
+        var limitingAgent = length;
+        var txtUsing = "";
+        var theFile = new File("src/inputData/warAndPeace.txt");
+        var theScanner = new Scanner(theFile);
+        var theInputTxt = new StringBuilder();
+
+
+        while (theScanner.hasNext()) {
+
+            theInputTxt.append(theScanner.next());
+            theInputTxt.append("\n");
+
+
+        }
+
+        HashMap possibleChars = SpellCheckGUI.getChars();
+
+
+
+        ArrayList ints = new ArrayList();
+
+
+        for (var i = 0; i < theInputTxt.length(); i++) {
+            if (possibleChars.get(theInputTxt.charAt(i)) != null) {
+
+
+                if (i > 0) {
+                    if (possibleChars.get(theInputTxt.charAt(i - 1)) == null) {
+
+                        ints.add(i);
+                    }
+                } else {
+                    ints.add(i);
+
+
+                }
+
+                if (i < theInputTxt.length() - 1) {
+                    if (possibleChars.get(theInputTxt.charAt(i + 1)) == null) {
+
+                        ints.add(i);
+                    }
+
+                } else {
+
+                    ints.add(i);
+                }
+
+            }
+
+
+        }
+
+      int endingIndex=(int)ints.get(length*2-1);
+
+       txtUsing= theInputTxt.toString().substring(0,endingIndex);
+
+       return txtUsing;
+
+
+
+    }
 
 
 }
