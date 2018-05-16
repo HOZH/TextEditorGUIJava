@@ -64,6 +64,10 @@ performance record
 3) When the string length is 10,000 words.
 4) When the string length is 100,000 words.
  */
+//todo swap name between generateMarkov and formMarkov
+
+
+//todo need to clear markov cache b4 reload another text
 
 
 /*

@@ -9,13 +9,15 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import static java.lang.StrictMath.log;
+
 public class lineChartGUI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
 
-        NumberAxis xAxis = new NumberAxis(0, 100000, 100);
-        NumberAxis yAxis = new NumberAxis(0, 10000, 10);
+        NumberAxis xAxis = new NumberAxis(0, 100000, log(100));
+        NumberAxis yAxis = new NumberAxis(0, 10000, log(100));
         xAxis.setLabel("amount of words");
         yAxis.setLabel("time used in milliseconds");
 

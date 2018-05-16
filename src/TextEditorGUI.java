@@ -16,8 +16,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 /**
@@ -52,6 +54,7 @@ public class TextEditorGUI {
     /*
     vars for view menu using mainly
      */
+    private String splitKey = ",\\s*|\\s+|\\.\\s*|!\\s*|\\?\\s*|\"\\s*|”\\s*|“\\s*|’\\s*";
     private int wordCount;
     private int sentenceCount;
     private int syllableCount;
@@ -60,7 +63,7 @@ public class TextEditorGUI {
     private String record;
 
     private String clipBoard;
-
+    private HashSet filterKey = new HashSet();
 
     /*
     for markov using
@@ -74,6 +77,9 @@ public class TextEditorGUI {
     private ListIterator iter1 = new ListIterator(masterList);
     private ListIterator iter2 = new ListIterator(masterList);
     private Random random = new Random();
+
+
+
 
     /*
     for spell check using
@@ -122,7 +128,6 @@ public class TextEditorGUI {
         textArea.setText(inputTxt.toString());
         currentTxt = inputTxt.toString();
 
-//        textArea.appendText(inputTxt.toString());
 
     }
 
@@ -131,7 +136,9 @@ public class TextEditorGUI {
      */
     private void wordC() {
         String words = currentTxt;
-        String[] strs = words.trim().split(",\\s*|\\s+|\\.\\s*");
+        String[] strs = words.trim().split(splitKey);
+        strs=getWords(strs);
+
         wordCount = (int) Arrays.stream(strs).count();
 
     }
@@ -164,7 +171,8 @@ public class TextEditorGUI {
         }
 
 
-        String[] strs = words.split(",\\s*|\\s|\\.\\s*");
+        String[] strs = words.split(splitKey);
+        strs=getWords(strs);
 
 
         long silent = Arrays.stream(strs).map(x -> {
@@ -172,7 +180,7 @@ public class TextEditorGUI {
                     &&
                     x.substring(0, x.length() - 2).matches("[AEIOUaeiouyY]+")
                     && ((x.endsWith("e") && x.charAt(x.length() - 2) != 'l') || x.endsWith("es") || x.endsWith("ed"))) {
-                //   System.out.println(x);
+
                 return null;
 
             }
@@ -214,27 +222,36 @@ public class TextEditorGUI {
 
         Pattern pattern = Pattern.compile(syllables);
 
-        Matcher matcher = pattern.matcher(words);
-        int count = 0;
 
-        while (matcher.find()) {
-            count++;
-        }
+        int[] counter = new int[1];
 
-        String[] strs = words.trim().split(",\\s*|\\s+|\\.\\s*");
+       String[] strs = words.trim().split(splitKey);
+        strs=getWords(strs);
         long silent = Arrays.stream(strs).map(x -> {
+
+            int count = 0;
+
+            Matcher matcher = pattern.matcher(x);
+
+
+            while (matcher.find()) {
+                count++;
+            }
+            counter[0] = counter[0] + count;
+
+
             if (x.length() >= 3
                     &&
                     x.substring(0, x.length() - 2).matches("[AEIOUaeiouyY]+")
                     && ((x.endsWith("e") && x.charAt(x.length() - 2) != 'l') || x.endsWith("es") || x.endsWith("ed"))) {
-                //   System.out.println(x);
+
                 return null;
 
             }
             return x;
         }).filter(Objects::isNull).count();
 
-        int syllablesNum = count - (int) silent;
+        int syllablesNum = counter[0] - (int) silent;
 
         syllableCount = syllablesNum;
         wordCount = (int) Arrays.stream(strs).count();
@@ -309,7 +326,6 @@ public class TextEditorGUI {
 
 
     }
-    //fixme still need to implement the top edit menu
 
     /**
      * close current editing， wipe the textArea and set it non-editable
@@ -319,7 +335,7 @@ public class TextEditorGUI {
         currentFile = null;
         statusBar.setText("");
         textArea.setEditable(false);
-//        singleLoopVSThreeLoops();
+
 
     }
 
@@ -421,6 +437,7 @@ public class TextEditorGUI {
      */
     public void delete() {
         statusBar.setText("deleted");
+        textArea.setText("");
     }
 
     /**
@@ -448,8 +465,7 @@ public class TextEditorGUI {
 
     private void popUp() {
         final Stage dialog = new Stage();
-        // dialog.initModality(Modality.APPLICATION_MODAL);
-        //dialog.initOwner(primaryStage);
+
         VBox dialogVbox = new VBox(20);
         dialogVbox.getChildren().add(new Text("Random String Generator"));
 
@@ -463,23 +479,20 @@ public class TextEditorGUI {
         TextField textField1 = new TextField();
         textField1.setPromptText("input the length here (positive integer)");
         generate.setOnAction(event -> {
-//            try{
+
 
             var startTime = System.currentTimeMillis();
-            formMarkov();
+
+            generateMarkov();
             System.out.println(System.currentTimeMillis() - startTime + " millisecond used");
-//            }
-//            catch(NumberFormatException ex)
-//            {
-//                textField1.setText("please input a positive integer here");
-//            }
+
         });
         add.setOnAction(event1 -> {
             try {
                 inputString = textField.getText();
                 inputLength = Integer.valueOf(textField1.getText());
-//                formMarkov();
-                generateMarkov();
+
+                formMarkov();
             } catch (NumberFormatException ex) {
                 textField1.setText("please input a positive integer here");
             }
@@ -496,14 +509,22 @@ public class TextEditorGUI {
     }
 
     /**
-     * set the textArea text to the random string that form by markov function
+     * mapping the words into markov
      */
 
-    private void formMarkov() {
+    private void generateMarkov() {
+
+
+        uniqueWords = new HashSet();
+        LinkedList masterList = new LinkedList();
+        iter1 = new ListIterator(masterList);
+        iter2 = new ListIterator(masterList);
+
 
         String words = currentTxt;
         System.out.println(currentTxt);
-        String[] strs = words.split(",\\s*|\\s|\\.\\s*");
+       String[] strs = words.split(splitKey);
+        strs=getWords(strs);
 
         Arrays.stream(strs).forEach(x -> uniqueWords.add(x));
 
@@ -529,11 +550,11 @@ public class TextEditorGUI {
 
     }
 
-    /**
-     * mapping the words into markov
-     */
 
-    private void generateMarkov() {
+    /**
+     * set the textArea text to the random string that form by markov function
+     */
+    private void formMarkov() {
 
         iter1.reset();
         iter2.reset();
@@ -541,19 +562,47 @@ public class TextEditorGUI {
         System.out.println(inputString);
         String result = inputString + " ";
         int textLength = 1;
-        String answer;
+        String answer = null;
         var isQualified = true;
 
         while (!iter1.isNull() && isQualified) {
             if (inputString.equals((String) iter1.next().getdata())) {
 
                 answer = randomWord(iter2.next());
+
+                if(answer==null)
+                {break;}
+
+
+//
+//
+//
+//                if (answer.trim().length() == 0) {
+//                    System.out.println("Space detected");
+//                    for (Character c : answer.toCharArray()) {
+//                        System.out.println(Integer.valueOf(c));
+//                    }
+//                }
+//                if (answer.matches("\\W+")) {
+//                    System.out.println("Non-words detected");
+//                    for (Character c : answer.toCharArray()) {
+//                        System.out.println(Integer.valueOf(c));
+//                        System.out.println(c);
+//                    }
+//                }
+
+
+
+
                 result = result + answer + " ";
                 inputString = answer;
                 iter1.reset();
                 iter2.reset();
                 textLength++;
+                System.out.println(textLength);
+                System.out.println(answer);
                 if (textLength >= inputLength) {
+                    System.out.println(textLength);
                     isQualified = false;
                     textLength = 1;
                 }
@@ -567,6 +616,8 @@ public class TextEditorGUI {
             }
 
         }
+        System.out.println(textLength);
+        System.out.println(answer);
         textArea.setText(result);
     }
 
@@ -576,7 +627,9 @@ public class TextEditorGUI {
      */
 
     private String randomWord(Link key) {
-
+if(key.getBabies().getFirst()==null){
+    return null;
+}
         String lalala = (String) key.getBabies().getFirst().getdata();
         ListIterator iter = new ListIterator(key.getBabies());
         int num = random.nextInt(100);
@@ -594,18 +647,6 @@ public class TextEditorGUI {
 
     }
 
-//    public void afterExitSpellCheckerStage(){
-//
-////        textArea.setText(SpellCheckGUI.spellCheckTxt);
-//        demo.ifModified.addListener();
-//        if(demo.ifModified)
-//        {
-//            textArea.setText(SpellCheckGUI.spellCheckTxt);
-//            demo.ifModified=false;
-//        }
-//
-//    }
-
 
     /**
      * listener for spell checker, sending back the modified data from spell check to the text editor
@@ -614,27 +655,10 @@ public class TextEditorGUI {
         demo.ifModified.addListener(e -> {
             textArea.setText(SpellCheckGUI.spellCheckTxt);
             demo.ifModified.setValue(false);
-//            textArea.setText(demo.ifModified.getValue().toString());
+
 
         });
     }
-
-//    private void onFlyInspector() {
-//        // textArea.focusedProperty()
-//        textArea.textProperty().addListener((obs, oldValue, newValue) -> {
-//
-//            if (oldValue != null) {
-//
-//                System.out.println(textArea.getText());
-//                currentTxt = textArea.getText();
-//                analyze();
-//                statusMsg = "Found " + sentenceCount + " sentences and " + wordCount + " words and the flesch score is " + fleschScore;
-//                statusBar.setText(statusMsg);
-//                System.out.println(statusMsg);
-//            }
-//
-//        });
-//    }
 
 
     /**
@@ -720,18 +744,6 @@ public class TextEditorGUI {
         getLineChart(singleLoopData, threeLoopsData);
 
 
-//        var  aFile = new File("src/outputData/3LoopsVS1Loop.txt");
-//        var lalalaScanner = new Scanner(aFile);
-//
-//        ArrayList<Integer> intss = new ArrayList<Integer>();
-//
-//        while(lalalaScanner.hasNextInt())
-//        {
-//            System.out.println(lalalaScanner.nextInt());
-//        }
-//
-
-
     }
 
     /**
@@ -742,8 +754,8 @@ public class TextEditorGUI {
      */
     private void getLineChart(int[][] series1, int[][] series2) {
 
-        NumberAxis xAxis = new NumberAxis(0, 100000, 100);
-        NumberAxis yAxis = new NumberAxis(0, 1500, 5);
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("amount of words");
         yAxis.setLabel("time used in milliseconds");
 
@@ -756,16 +768,12 @@ public class TextEditorGUI {
 
         for (int i = 0; i < series1.length; i++) {
             singleLoop.getData().add(new XYChart.Data<>(series1[i][0], series1[i][1]));
-            threeLoops.getData().add(new XYChart.Data<>(series2[i][0], series1[2][1]));
+            threeLoops.getData().add(new XYChart.Data<>(series2[i][0], series2[i][1]));
 
         }
 
-
-//        singleLoop.getData().addAll(new XYChart.Data<>(100, 10), new XYChart.Data<>(1000, 100), new XYChart.Data<>(10000, 4857));
-
         threeLoops.setName("threeLoops");
 
-//        threeLoops.getData().addAll(new XYChart.Data<>(200, 100), new XYChart.Data<>(3000, 1000), new XYChart.Data<>(9000, 6980));
 
         VBox vBox = new VBox();
         vBox.getChildren().add(xyChart);
@@ -847,6 +855,25 @@ public class TextEditorGUI {
         txtUsing = theInputTxt.toString().substring(0, endingIndex);
 
         return txtUsing;
+
+
+    }
+
+    /**
+     *
+     * @param beforeFilter the words collection before filter
+     * @return the words collection after filter
+     */
+    public String[] getWords(String[] beforeFilter) {
+        String filterKetString="!?,.:;'’’'”“\"@#$%^&*()_-+=";
+
+        filterKey.addAll(Arrays.stream(filterKetString.split("")).collect(Collectors.toList()));
+
+        Predicate<String> someCondition1 = x -> !filterKey.contains(x);
+
+        String[] afterFilter = Arrays.stream(beforeFilter).filter(someCondition1).map(Object::toString).toArray(String[]::new);
+
+        return afterFilter;
 
 
     }
