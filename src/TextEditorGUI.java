@@ -54,7 +54,7 @@ public class TextEditorGUI {
     /*
     vars for view menu using mainly
      */
-    private String splitKey = ",\\s*|\\s+|\\.\\s*|!\\s*|\\?\\s*|\"\\s*|”\\s*|“\\s*|’\\s*";
+    private String splitKey = ",\\s*|\\s+|\\.\\s*|!\\s*|\\?\\s*|\"\\s*|”\\s*|“\\s*|’\\s*|'\\s*";
     private int wordCount;
     private int sentenceCount;
     private int syllableCount;
@@ -873,7 +873,7 @@ if(key.getBabies().getFirst()==null){
 
         String[] afterFilter = Arrays.stream(beforeFilter).filter(someCondition1).map(Object::toString).toArray(String[]::new);
 
-        return afterFilter;
+        return beforeFilter;
 
 
     }
