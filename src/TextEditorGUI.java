@@ -54,7 +54,7 @@ public class TextEditorGUI {
     /*
     vars for view menu using mainly
      */
-    private String splitKey = ",\\s*|\\s+|\\.\\s*|!\\s*|\\?\\s*|\"\\s*|”\\s*|“\\s*|’\\s*|'\\s*";
+    private String splitKey = ",\\s*|\\s+|\\.\\s*|!\\s*|\\?\\s*|\"\\s*|”\\s*|“\\s*|’\\s*";
     private int wordCount;
     private int sentenceCount;
     private int syllableCount;
@@ -573,27 +573,6 @@ public class TextEditorGUI {
                 if(answer==null)
                 {break;}
 
-
-//
-//
-//
-//                if (answer.trim().length() == 0) {
-//                    System.out.println("Space detected");
-//                    for (Character c : answer.toCharArray()) {
-//                        System.out.println(Integer.valueOf(c));
-//                    }
-//                }
-//                if (answer.matches("\\W+")) {
-//                    System.out.println("Non-words detected");
-//                    for (Character c : answer.toCharArray()) {
-//                        System.out.println(Integer.valueOf(c));
-//                        System.out.println(c);
-//                    }
-//                }
-
-
-
-
                 result = result + answer + " ";
                 inputString = answer;
                 iter1.reset();
@@ -873,7 +852,7 @@ if(key.getBabies().getFirst()==null){
 
         String[] afterFilter = Arrays.stream(beforeFilter).filter(someCondition1).map(Object::toString).toArray(String[]::new);
 
-        return beforeFilter;
+        return afterFilter;
 
 
     }
