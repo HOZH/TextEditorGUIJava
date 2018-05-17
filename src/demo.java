@@ -49,47 +49,6 @@ public class demo extends Application {
 
     }
 
-//    public static void afterExitSpellCheckerStage(TextEditorGUI textEditorGUI){
-//
-//        textEditorGUI.textArea.setText(SpellCheckGUI.spellCheckTxt);
-//
-//    }
+
 }
 
-/*
-one single loop VS. three loops
-performance record
-1) When the string length is 100 words
-2) When the string length is 1,000 words
-3) When the string length is 10,000 words.
-4) When the string length is 100,000 words.
- */
-//todo swap name between generateMarkov and formMarkov
-
-
-//todo need to clear markov cache b4 reload another text
-
-
-/*
-todo  up to 4 threads random access reading for input txt
-todo  rewrite markov with binary search tree or hashMap
-todo  rewrite 3loops
-todo  1) When the string length is 100 words
-todo 2) When the string length is 1,000 words
-todo 3) When the string length is 10,000 words.
-todo 4) When the string length is 100,000 words.
-todo replace explicit variable type to variable.
-
-
- */
-
-/*
-todo set boundaries for getNext and getPrevious
-todo set defualt textArea not editable
-todo save speed of 4 kinds of words
-todo 3 loops and single loop
-todo rewrite markov with binary search tree
-todo plot performancd in the line chart
-todo update comments
-todo /if i have time convert this code to java 8 version
- */

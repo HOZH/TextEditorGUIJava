@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -92,7 +91,7 @@ public class TextEditorGUI {
      */
     private void popUpSpellCheckWindow() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("SpellCheckGUI.fxml"));
-        Stage spellCheckStage = new Stage();
+        var spellCheckStage = new Stage();
         spellCheckStage.setTitle("Spell Checker");
         spellCheckStage.setScene(new Scene(root));
         spellCheckStage.show();
@@ -135,9 +134,9 @@ public class TextEditorGUI {
      * set words count
      */
     private void wordC() {
-        String words = currentTxt;
-        String[] strs = words.trim().split(splitKey);
-        strs=getWords(strs);
+        var words = currentTxt;
+        var strs = words.trim().split(splitKey);
+        strs = getWords(strs);
 
         wordCount = (int) Arrays.stream(strs).count();
 
@@ -147,7 +146,7 @@ public class TextEditorGUI {
      * set sentences count
      */
     private void sentenceC() {
-        String words = currentTxt;
+        var words = currentTxt;
         sentenceCount = words.split("!|\\.|\\?").length;
 
     }
@@ -157,25 +156,25 @@ public class TextEditorGUI {
      */
     private void syllableC() {
 
-        String words = currentTxt;
-        String syllables = "[aeiouyAEIOUY]+";
+        var words = currentTxt;
+        var syllables = "[aeiouyAEIOUY]+";
 
 
-        Pattern pattern = Pattern.compile(syllables);
+        var pattern = Pattern.compile(syllables);
 
-        Matcher matcher = pattern.matcher(words);
-        int count = 0;
+        var matcher = pattern.matcher(words);
+        var count = 0;
 
         while (matcher.find()) {
             count++;
         }
 
 
-        String[] strs = words.split(splitKey);
-        strs=getWords(strs);
+        var strs = words.split(splitKey);
+        strs = getWords(strs);
 
 
-        long silent = Arrays.stream(strs).map(x -> {
+        var silent = Arrays.stream(strs).map(x -> {
             if (x.length() >= 3
                     &&
                     x.substring(0, x.length() - 2).matches("[AEIOUaeiouyY]+")
@@ -187,7 +186,7 @@ public class TextEditorGUI {
             return x;
         }).filter(Objects::isNull).count();
 
-        int syllablesNum = count - (int) silent;
+        var syllablesNum = count - (int) silent;
         syllableCount = syllablesNum;
     }
 
@@ -197,16 +196,16 @@ public class TextEditorGUI {
      * @see TextEditorGUI#sentenceC()
      * @see TextEditorGUI#syllableC()
      */
-    public long analyzeWith3Loops() {
-        var timeConSumed = System.currentTimeMillis();
+    private long analyzeWith3Loops() {
+        var timeConsumed = System.currentTimeMillis();
         wordC();
         sentenceC();
         syllableC();
         fleschScore = 206.835 - 1.015 * ((double) wordCount / (double) sentenceCount) - 84.6 * ((double) syllableCount / (double) wordCount);
         fleschScore = Math.round(fleschScore * 1000.0) / 1000.0;
 
-        timeConSumed = System.currentTimeMillis() - timeConSumed;
-        return timeConSumed;
+        timeConsumed = System.currentTimeMillis() - timeConsumed;
+        return timeConsumed;
 
 
     }
@@ -216,22 +215,22 @@ public class TextEditorGUI {
      */
     public long analyze() {
 
-        var timeConSumed = System.currentTimeMillis();
-        String words = currentTxt;
-        String syllables = "[aeiouyAEIOUY]+";
+        var timeConsumed = System.currentTimeMillis();
+        var words = currentTxt;
+        var syllables = "[aeiouyAEIOUY]+";
 
-        Pattern pattern = Pattern.compile(syllables);
+        var pattern = Pattern.compile(syllables);
 
 
-        int[] counter = new int[1];
+        var counter = new int[1];
 
-       String[] strs = words.trim().split(splitKey);
-        strs=getWords(strs);
-        long silent = Arrays.stream(strs).map(x -> {
+        var strs = words.trim().split(splitKey);
+        strs = getWords(strs);
+        var silent = Arrays.stream(strs).map(x -> {
 
-            int count = 0;
+            var count = 0;
 
-            Matcher matcher = pattern.matcher(x);
+            var matcher = pattern.matcher(x);
 
 
             while (matcher.find()) {
@@ -251,15 +250,15 @@ public class TextEditorGUI {
             return x;
         }).filter(Objects::isNull).count();
 
-        int syllablesNum = counter[0] - (int) silent;
+        var syllablesNum = counter[0] - (int) silent;
 
         syllableCount = syllablesNum;
         wordCount = (int) Arrays.stream(strs).count();
         sentenceCount = words.split("!|\\.|\\?").length;
         fleschScore = 206.835 - 1.015 * ((double) wordCount / (double) sentenceCount) - 84.6 * ((double) syllableCount / (double) wordCount);
         fleschScore = Math.round(fleschScore * 1000.0) / 1000.0;
-        timeConSumed = System.currentTimeMillis() - timeConSumed;
-        return timeConSumed;
+        timeConsumed = System.currentTimeMillis() - timeConsumed;
+        return timeConsumed;
 
     }
 
@@ -302,7 +301,7 @@ public class TextEditorGUI {
      * main function for the fileChooser
      */
     private void fileChooserWindow() {
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        var extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(extFilter);
         currentFile = fileChooser.showOpenDialog(new Stage());
     }
@@ -330,7 +329,7 @@ public class TextEditorGUI {
     /**
      * close current editing， wipe the textArea and set it non-editable
      */
-    public void closeFile() throws FileNotFoundException {
+    public void closeFile() {
         textArea.setText("");
         currentFile = null;
         statusBar.setText("");
@@ -464,19 +463,19 @@ public class TextEditorGUI {
      */
 
     private void popUp() {
-        final Stage dialog = new Stage();
+        final var dialog = new Stage();
 
-        VBox dialogVbox = new VBox(20);
+        var dialogVbox = new VBox(20);
         dialogVbox.getChildren().add(new Text("Random String Generator"));
 
 
-        Button add = new Button("submit");
-        Button generate = new Button("generate");
-        TextField textField = new TextField();
+        var add = new Button("submit");
+        var generate = new Button("generate");
+        var textField = new TextField();
 
 
         textField.setPromptText("input the key word here (String)");
-        TextField textField1 = new TextField();
+        var textField1 = new TextField();
         textField1.setPromptText("input the length here (positive integer)");
         generate.setOnAction(event -> {
 
@@ -502,7 +501,7 @@ public class TextEditorGUI {
         dialogVbox.getChildren().addAll(generate, textField, textField1, add);
 
 
-        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        var dialogScene = new Scene(dialogVbox, 300, 200);
         dialog.setScene(dialogScene);
         dialog.show();
 
@@ -516,15 +515,15 @@ public class TextEditorGUI {
 
 
         uniqueWords = new HashSet();
-        LinkedList masterList = new LinkedList();
+        var masterList = new LinkedList();
         iter1 = new ListIterator(masterList);
         iter2 = new ListIterator(masterList);
 
 
-        String words = currentTxt;
+        var words = currentTxt;
         System.out.println(currentTxt);
-       String[] strs = words.split(splitKey);
-        strs=getWords(strs);
+        var strs = words.split(splitKey);
+        strs = getWords(strs);
 
         Arrays.stream(strs).forEach(x -> uniqueWords.add(x));
 
@@ -537,9 +536,9 @@ public class TextEditorGUI {
 
         while (!iter1.isNull()) {
 
-            Link temp = iter1.next();
-            String key = (String) temp.getdata();
-            for (int i = 0; i < strs.length - 1; i++) {
+            var temp = iter1.next();
+            var key = (String) temp.getdata();
+            for (var i = 0; i < strs.length - 1; i++) {
                 if (strs[i].equals(key) && strs[i] != null) {
                     temp.getBabies().insetLast(new Link(strs[i + 1]));
                 }
@@ -560,8 +559,8 @@ public class TextEditorGUI {
         iter2.reset();
         System.out.println(inputLength);
         System.out.println(inputString);
-        String result = inputString + " ";
-        int textLength = 1;
+        var result = inputString + " ";
+        var textLength = 1;
         String answer = null;
         var isQualified = true;
 
@@ -570,8 +569,9 @@ public class TextEditorGUI {
 
                 answer = randomWord(iter2.next());
 
-                if(answer==null)
-                {break;}
+                if (answer == null) {
+                    break;
+                }
 
                 result = result + answer + " ";
                 inputString = answer;
@@ -606,13 +606,13 @@ public class TextEditorGUI {
      */
 
     private String randomWord(Link key) {
-if(key.getBabies().getFirst()==null){
-    return null;
-}
-        String lalala = (String) key.getBabies().getFirst().getdata();
-        ListIterator iter = new ListIterator(key.getBabies());
-        int num = random.nextInt(100);
-        for (int i = 0; i < num; i++) {
+        if (key.getBabies().getFirst() == null) {
+            return null;
+        }
+        var lalala = (String) key.getBabies().getFirst().getdata();
+        var iter = new ListIterator(key.getBabies());
+        var num = random.nextInt(100);
+        for (var i = 0; i < num; i++) {
             if (iter.atEnd()) {
                 iter.reset();
             } else {
@@ -620,7 +620,7 @@ if(key.getBabies().getFirst()==null){
             }
         }
 
-        String returnValue = (String) iter.next().getdata();
+        var returnValue = (String) iter.next().getdata();
         return returnValue;
 
 
@@ -653,8 +653,8 @@ if(key.getBabies().getFirst()==null){
      * @see TextEditorGUI#getLineChart(int[][], int[][])
      */
     public void singleLoopVSThreeLoops() throws FileNotFoundException {
-        int singleLoopTime = 0;
-        int threeLoopsTime = 0;
+        var singleLoopTime = 0;
+        var threeLoopsTime = 0;
 
         var singleLoopData = new int[4][2];
         var threeLoopsData = new int[4][2];
@@ -733,19 +733,19 @@ if(key.getBabies().getFirst()==null){
      */
     private void getLineChart(int[][] series1, int[][] series2) {
 
-        NumberAxis xAxis = new NumberAxis();
-        NumberAxis yAxis = new NumberAxis();
+        var xAxis = new NumberAxis();
+        var yAxis = new NumberAxis();
         xAxis.setLabel("amount of words");
         yAxis.setLabel("time used in milliseconds");
 
         XYChart xyChart = new LineChart(xAxis, yAxis);
 
-        XYChart.Series singleLoop = new XYChart.Series();
-        XYChart.Series threeLoops = new XYChart.Series();
+        var singleLoop = new XYChart.Series();
+        var threeLoops = new XYChart.Series();
 
         singleLoop.setName("singleLoop");
 
-        for (int i = 0; i < series1.length; i++) {
+        for (var i = 0; i < series1.length; i++) {
             singleLoop.getData().add(new XYChart.Data<>(series1[i][0], series1[i][1]));
             threeLoops.getData().add(new XYChart.Data<>(series2[i][0], series2[i][1]));
 
@@ -754,12 +754,12 @@ if(key.getBabies().getFirst()==null){
         threeLoops.setName("threeLoops");
 
 
-        VBox vBox = new VBox();
+        var vBox = new VBox();
         vBox.getChildren().add(xyChart);
 
-        Scene chartScene = new Scene(vBox);
+        var chartScene = new Scene(vBox);
 
-        Stage chartStage = new Stage();
+        var chartStage = new Stage();
 
         chartStage.setScene(chartScene);
         chartStage.show();
@@ -792,10 +792,10 @@ if(key.getBabies().getFirst()==null){
 
         }
 
-        HashMap possibleChars = SpellCheckGUI.getChars();
+        var possibleChars = SpellCheckGUI.getChars();
 
 
-        ArrayList ints = new ArrayList();
+        var ints = new ArrayList();
 
 
         for (var i = 0; i < theInputTxt.length(); i++) {
@@ -829,7 +829,7 @@ if(key.getBabies().getFirst()==null){
 
         }
 
-        int endingIndex = (int) ints.get(length * 2 - 1);
+        var endingIndex = (int) ints.get(length * 2 - 1);
 
         txtUsing = theInputTxt.toString().substring(0, endingIndex);
 
@@ -839,18 +839,17 @@ if(key.getBabies().getFirst()==null){
     }
 
     /**
-     *
      * @param beforeFilter the words collection before filter
      * @return the words collection after filter
      */
     public String[] getWords(String[] beforeFilter) {
-        String filterKetString="!?,.:;'’’'”“\"@#$%^&*()_-+=";
+        var filterKetString = "!?,.:;'’’'”“\"@#$%^&*()_-+=";
 
         filterKey.addAll(Arrays.stream(filterKetString.split("")).collect(Collectors.toList()));
 
         Predicate<String> someCondition1 = x -> !filterKey.contains(x);
 
-        String[] afterFilter = Arrays.stream(beforeFilter).filter(someCondition1).map(Object::toString).toArray(String[]::new);
+        var afterFilter = Arrays.stream(beforeFilter).filter(someCondition1).map(Object::toString).toArray(String[]::new);
 
         return afterFilter;
 

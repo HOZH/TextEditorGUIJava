@@ -1,1 +1,1 @@
-single loop cost 0 millisecond on 1 words and three loops cost 0 millisecond.
+single loop cost 0 millisecond on 1 words and three loops cost 1 millisecond.

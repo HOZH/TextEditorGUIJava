@@ -23,9 +23,7 @@ public class lambdaTest {
         System.out.println(count);
 
 
-
-
-        var num2=0;
+        var num2 = 0;
         var ints = new int[1];
 
 
@@ -51,38 +49,34 @@ public class lambdaTest {
 
 
         long silent =
-                Arrays.stream(strs).map(x-> {
-                    var num1=0;
+                Arrays.stream(strs).map(x -> {
+                    var num1 = 0;
 
 
                     Matcher matcher1 = pattern.matcher(x);
 
 
-
-
-                    while(matcher1.find()){
+                    while (matcher1.find()) {
 //                        System.out.println("y");
                         num1++;
 
                     }
 //                    System.out.println(num1);
-                    ints[1]=ints[1]+num1;
+                    ints[1] = ints[1] + num1;
 //                    System.out.println(ints[1]);
 
 
+                    if (x.length() >= 3
+                            &&
+                            x.substring(0, x.length() - 2).matches("[AEIOUaeiouyY]+")
+                            && ((x.endsWith("e") && x.charAt(x.length() - 2) != 'l') || x.endsWith("es") || x.endsWith("ed"))) {
+                        //   System.out.println(x);
+                        var y = x;
+                        return null;
 
-
-            if (x.length() >= 3
-                    &&
-                    x.substring(0, x.length() - 2).matches("[AEIOUaeiouyY]+")
-                    && ((x.endsWith("e") && x.charAt(x.length() - 2) != 'l') || x.endsWith("es") || x.endsWith("ed"))) {
-                //   System.out.println(x);
-                var y = x;
-                return null;
-
-            }
-            return x;
-        }).filter(Objects::isNull).count();
+                    }
+                    return x;
+                }).filter(Objects::isNull).count();
 
 
         System.out.println(silent);

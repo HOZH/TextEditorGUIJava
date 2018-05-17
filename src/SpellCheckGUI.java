@@ -6,7 +6,6 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * @author hz
@@ -14,34 +13,51 @@ import java.util.Iterator;
 public class SpellCheckGUI {
 
 
+    public static String spellCheckTxt = "";
     @FXML
     public TextArea textArea;
-
     @FXML
     TextField textField;
-
     @FXML
     Button nextButton, previousButton, replaceButton, exitButton, loadButton;
-
-
-    public static String spellCheckTxt = "";
+    ArrayList<Integer> errorLocations = new ArrayList<Integer>();
     private Object[] errorsLocationsArr;
     private HashMap<Integer, int[]> wordLocation;
     private int[] answer;
     private int currentLocationOnErrorArr;
     private int currentLocation;
-    ArrayList<Integer> errorLocations = new ArrayList<Integer>();
 
+    /**
+     * @return a hashMap that contains all the letters and ,
+     */
+    public static HashMap getChars() {
+
+        var map2 = new HashMap();
+
+        for (var i = 'A'; i <= 'Z'; i++) {
+            map2.put(i, " ");
+
+
+        }
+
+        for (var i = 'a'; i <= 'z'; i++) {
+            map2.put(i, " ");
+
+
+        }
+        var dot = '\'';
+        map2.put(dot, " ");
+
+
+        return map2;
+    }
 
     /**
      * get to the next incorrect spelling word
      */
     public void getNext() {
         if (currentLocationOnErrorArr < errorsLocationsArr.length - 1) {
-
             currentLocation = (int) errorsLocationsArr[++currentLocationOnErrorArr];
-
-            System.out.println("current location is at index" + currentLocation);
             answer = wordLocation.get(currentLocation);
             textArea.selectRange(answer[0], answer[1] + 1);
 
@@ -55,30 +71,22 @@ public class SpellCheckGUI {
 
         if (currentLocationOnErrorArr > 0) {
             currentLocation = (int) errorsLocationsArr[--currentLocationOnErrorArr];
-
-            System.out.println("current location is at index" + currentLocation);
-
-
             answer = wordLocation.get(currentLocation);
             textArea.selectRange(answer[0], answer[1] + 1);
         }
 
     }
 
-
     /**
      * replace selected word with string from textField
      */
     public void replace() {
-        // todo textProperty String replace
+
         spellCheckTxt.substring(answer[0], answer[1]);
         spellCheckTxt = spellCheckTxt.substring(0, answer[0]) + textField.getText() + spellCheckTxt.substring(answer[1] + 1);
-        System.out.println(demo.ifModified.getValue());
-        System.out.println(spellCheckTxt + "123");
 
-        //TextEditorGUI.textArea.setText(spellCheckTxt);
+
         demo.ifModified.setValue(true);
-        System.out.println(demo.ifModified.getValue());
         loadTxt();
 
 
@@ -88,7 +96,7 @@ public class SpellCheckGUI {
      * exit the spell checker
      */
     public void exit() {
-        Stage stage = (Stage) exitButton.getScene().getWindow();
+        var stage = (Stage) exitButton.getScene().getWindow();
         stage.close();
     }
 
@@ -115,15 +123,14 @@ public class SpellCheckGUI {
         textArea.setText(spellCheckTxt);
 
 
-        String[] words = spellCheckTxt.trim().split(",\\s*|\\s+|\\.\\s*");
+        var words = spellCheckTxt.trim().split(",\\s*|\\s+|\\.\\s*");
 
 
         errorLocations = new ArrayList<Integer>();
-        for (int i = 0; i < words.length; i++) {
+        for (var i = 0; i < words.length; i++) {
             if (demo.dictionary.get(words[i]) == null) {
-                //   System.out.println(words[i]);
-                errorLocations.add(i);
 
+                errorLocations.add(i);
                 System.out.println(i + "index");
 
 
@@ -132,11 +139,11 @@ public class SpellCheckGUI {
         }
         errorsLocationsArr = errorLocations.toArray();
 
-        HashMap possibleChars = getChars();
+        var possibleChars = getChars();
 
 
-        int[] range = new int[2];
-        ArrayList ints = new ArrayList();
+        var range = new int[2];
+        var ints = new ArrayList();
         wordLocation = new HashMap();
 
         for (var i = 0; i < spellCheckTxt.length(); i++) {
@@ -174,8 +181,8 @@ public class SpellCheckGUI {
         System.out.println(ints.stream().count());
 
 
-        Iterator iter = ints.iterator();
-        int count = 0;
+        var iter = ints.iterator();
+        var count = 0;
         for (int i = 0; i < ints.size() / 2; i++) {
 
             range[0] = (int) iter.next();
@@ -188,32 +195,6 @@ public class SpellCheckGUI {
         answer = wordLocation.get(0);
 
 
-    }
-
-
-    /**
-     * @return a hashMap that contains all the letters and ,
-     */
-    public static HashMap getChars() {
-
-        HashMap map2 = new HashMap();
-
-        for (char i = 'A'; i <= 'Z'; i++) {
-            map2.put(i, " ");
-
-
-        }
-
-        for (char i = 'a'; i <= 'z'; i++) {
-            map2.put(i, " ");
-
-
-        }
-        char dot = '\'';
-        map2.put(dot, " ");
-
-
-        return map2;
     }
 
 
